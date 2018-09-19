@@ -1,6 +1,8 @@
 import os
 import json
 
+import torch
+
 from torchtracer.data import Config, Model
 
 
@@ -9,6 +11,8 @@ class StoreMan(object):
     Storage module.
     """
     CONFIG_FILENAME = 'config.json'
+    MODEL_DESCRIPTION_FILENAME = 'model.txt'
+    MODEL_PARAMETERS_FILENAME = 'model.pth'
     LOG_FILENAME = 'log'
 
     def __init__(self, root, task_id) -> None:
@@ -22,6 +26,9 @@ class StoreMan(object):
         if os.path.isdir(dir_path):
             raise FileExistsError('{} exists, you should rename the task id.'.format(task_id))
         self.root = self.mkdir(dir_path)
+
+    def close(self):
+        self.active_log.close()
 
     @staticmethod
     def mkdir(path) -> os.path:
@@ -39,13 +46,19 @@ class StoreMan(object):
         path = os.path.join(self.root, self.CONFIG_FILENAME)
         with open(path, 'w') as f:
             f.write(str(cfg))
-            # if isinstance(cfg, dict):
-            #     f.write(json.dumps(cfg))
-            # else:
-            #     raise TypeError('dict needed, but {} found.'.format(type(cfg)))
 
-    def store_model(self, model):
-        pass
+    def store_model(self, model, file=None):
+        description = str(model)
+        parameters = model.state_dict
+
+        description_file = os.path.join(self.root,
+                                        '{}.txt'.format(file) if file else self.MODEL_DESCRIPTION_FILENAME)
+        parameters_file = os.path.join(self.root,
+                                       '{}.pth'.format(file) if file else self.MODEL_PARAMETERS_FILENAME)
+
+        with open(description_file, 'w', encoding='utf-8') as f:
+            f.write(description)
+        torch.save(parameters, parameters_file)
 
     def log(self, msg, file=None):
         logfile = os.path.join(self.root,

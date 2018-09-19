@@ -2,7 +2,7 @@ import torch
 import numpy as np
 import torch.nn as nn
 from torchtracer import Tracer
-from torchtracer.data import Config
+from torchtracer.data import Config, Model
 
 
 def f(x):
@@ -66,12 +66,10 @@ def train(model, tracer, **kwargs):
         train_losses.append(train_loss)
         valid_losses.append(valid_loss)
 
+    tracer.store(Model(model))
+
 
 if __name__ == '__main__':
-    # with open('./config.ini', 'r') as f:
-    #     s = f.read()
-    # # cfg = Config(1).from_ini(s)
-
     net = nn.Sequential(nn.Linear(1, 6, True),
                         nn.ReLU(),
                         nn.Linear(6, 12, True),
@@ -83,7 +81,6 @@ if __name__ == '__main__':
             'batch_size': 20,
             'criterion': nn.MSELoss(),
             'optimizer': torch.optim.RMSprop(net.parameters(), lr=1e-3)}
-    tracer = Tracer('checkpoints')
-    tracer.attach()
-
+    tracer = Tracer('checkpoints').attach('rabbit')
     train(net, tracer, **args)
+    tracer.detach()
