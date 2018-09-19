@@ -1,6 +1,8 @@
-import torch
+import matplotlib.pyplot as plt
 import numpy as np
+import torch
 import torch.nn as nn
+
 from torchtracer import Tracer
 from torchtracer.data import Config, Model
 
@@ -34,7 +36,7 @@ def evaluate(model, **kwargs):
     return loss_sum / (30 * batch_size)
 
 
-def train(model, tracer, **kwargs):
+def train(model, tracer=None, **kwargs):
     cfg = Config(kwargs)
     tracer.store(cfg)
 
@@ -68,6 +70,12 @@ def train(model, tracer, **kwargs):
 
     tracer.store(Model(model))
 
+    plt.plot(train_losses, label='train loss', c='b')
+    plt.plot(valid_losses, label='valid loss', c='r')
+    plt.title('Demo Learning on SQRT')
+    plt.legend()
+    tracer.store(plt.gcf(), 'losses.png')
+
 
 if __name__ == '__main__':
     net = nn.Sequential(nn.Linear(1, 6, True),
@@ -78,9 +86,9 @@ if __name__ == '__main__':
                         nn.ReLU(),
                         nn.Linear(12, 1, True))
     args = {'epoch_n': 120,
-            'batch_size': 20,
+            'batch_size': 10,
             'criterion': nn.MSELoss(),
             'optimizer': torch.optim.RMSprop(net.parameters(), lr=1e-3)}
-    tracer = Tracer('checkpoints').attach('rabbit')
+    tracer = Tracer('checkpoints').attach('rabbit2')
     train(net, tracer, **args)
     tracer.detach()

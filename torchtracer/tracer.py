@@ -20,10 +20,10 @@ class Tracer:
     def detach(self):
         self.storage.close()
 
-    def store(self, item):
+    def store(self, item, file=None):
         if self.storage is None:
             raise Exception('You should attach with task id first.')
-        self.storage.store(item)
+        self.storage.store(item, file)
 
     def log(self, msg, file=None):
         if self.storage is None:

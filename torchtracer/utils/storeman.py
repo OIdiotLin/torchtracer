@@ -1,7 +1,7 @@
 import os
-import json
 
 import torch
+from matplotlib.figure import Figure
 
 from torchtracer.data import Config, Model
 
@@ -11,6 +11,7 @@ class StoreMan(object):
     Storage module.
     """
     CONFIG_FILENAME = 'config.json'
+    IMG_DIR = 'images'
     MODEL_DESCRIPTION_FILENAME = 'model.txt'
     MODEL_PARAMETERS_FILENAME = 'model.pth'
     LOG_FILENAME = 'log'
@@ -32,15 +33,22 @@ class StoreMan(object):
 
     @staticmethod
     def mkdir(path) -> os.path:
+        # create task directory
         if not os.path.isdir(path):
             os.mkdir(path)
+        # create image directory
+        img_dir = os.path.join(path, StoreMan.IMG_DIR)
+        if not os.path.isdir(img_dir):
+            os.mkdir(img_dir)
         return path
 
-    def store(self, item):
+    def store(self, item, file):
         if isinstance(item, Config):
             self.store_config(item)
         elif isinstance(item, Model):
-            self.store_model(item)
+            self.store_model(item, file)
+        elif isinstance(item, Figure):
+            self.store_image(item, file)
 
     def store_config(self, cfg):
         path = os.path.join(self.root, self.CONFIG_FILENAME)
@@ -59,6 +67,10 @@ class StoreMan(object):
         with open(description_file, 'w', encoding='utf-8') as f:
             f.write(description)
         torch.save(parameters, parameters_file)
+
+    def store_image(self, image, file):
+        img_file = os.path.join(self.root, self.IMG_DIR, file)
+        image.savefig(img_file)
 
     def log(self, msg, file=None):
         logfile = os.path.join(self.root,
