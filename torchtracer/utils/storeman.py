@@ -49,10 +49,11 @@ class StoreMan(object):
 
     def log(self, msg, file=None):
         logfile = os.path.join(self.root,
-                               self.LOG_FILENAME+file if file else self.LOG_FILENAME)
-        # if self.active_log
-        with open(logfile, 'a') as f:
-            f.write(str(msg))
-
-
-
+                               '{}.{}'.format(file, self.LOG_FILENAME) if file else self.LOG_FILENAME)
+        if self.active_log:
+            if not os.path.basename(self.active_log.name) == logfile:
+                self.active_log.close()
+                self.active_log = open(logfile, 'a', encoding='utf-8')
+        else:
+            self.active_log = open(logfile, 'a', encoding='utf-8')
+        self.active_log.write(msg + '\n')

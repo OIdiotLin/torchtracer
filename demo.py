@@ -21,7 +21,6 @@ def make_batch(batch_size, valid=False):
 
 
 def evaluate(model, **kwargs):
-    epoch_n = kwargs['epoch_n']
     batch_size = kwargs['batch_size']
     criterion = kwargs['criterion']
 
@@ -38,7 +37,7 @@ def evaluate(model, **kwargs):
 def train(model, tracer, **kwargs):
     cfg = Config(kwargs)
     tracer.store(cfg)
-    return
+
     epoch_n = kwargs['epoch_n']
     batch_size = kwargs['batch_size']
     criterion = kwargs['criterion']
@@ -62,7 +61,7 @@ def train(model, tracer, **kwargs):
         train_loss = loss_sum / (30 * batch_size)
         valid_loss = evaluate(model, **kwargs)
 
-        print(train_loss, valid_loss)
+        tracer.log('Epoch #{:03d}\ttrain_loss: {:.4f}\tvalid_loss: {:.4f}'.format(epoch, train_loss, valid_loss))
 
         train_losses.append(train_loss)
         valid_losses.append(valid_loss)
@@ -73,14 +72,13 @@ if __name__ == '__main__':
     #     s = f.read()
     # # cfg = Config(1).from_ini(s)
 
-    net = nn.Sequential(nn.Linear(1, 1, True),
-                        # nn.ReLU(),
-                        # nn.Linear(6, 12, True),
-                        # nn.ReLU(),
-                        # nn.Linear(12, 12, True),
-                        # nn.ReLU(),
-                        # nn.Linear(12, 1, True))
-                        )
+    net = nn.Sequential(nn.Linear(1, 6, True),
+                        nn.ReLU(),
+                        nn.Linear(6, 12, True),
+                        nn.ReLU(),
+                        nn.Linear(12, 12, True),
+                        nn.ReLU(),
+                        nn.Linear(12, 1, True))
     args = {'epoch_n': 120,
             'batch_size': 20,
             'criterion': nn.MSELoss(),

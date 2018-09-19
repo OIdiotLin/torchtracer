@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from torchtracer.utils import StoreMan
@@ -7,7 +8,7 @@ class Tracer:
     def __init__(self, root):
         self.root = root
         self.storage = None
-        print('Tracer start at {}'.format(self.root))
+        print('Tracer start at {}'.format(os.path.abspath(self.root)))
 
     def attach(self, task_id=None):
         if task_id is None:
@@ -19,5 +20,5 @@ class Tracer:
             raise Exception('You should attach first.')
         self.storage.store(item)
 
-    def log(self, msg):
-        self.storage.log(msg)
+    def log(self, msg, file=None):
+        self.storage.log(msg, file)
