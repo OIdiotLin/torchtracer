@@ -1,5 +1,5 @@
 __name__ = 'torchtracer'
-__version__ = '0.0.2'
+__version__ = '0.1.4'
 __author__ = 'OIdiotLin'
 __what__ = 'lmmnb!!'
 

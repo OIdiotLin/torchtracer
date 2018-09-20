@@ -31,11 +31,19 @@ from torchtracer import Tracer
 
 Assume that the root is `./checkpoints` and current task id is `lmmnb`.
 
+***Avoiding messing working directory, you should make root directory manually.***
+
 ```python
 tracer = Tracer('checkpoints').attach('lmmnb')
 ```
 
 This step will create a directory `checkpoints` inside which is a directory `lmmnb` for current AI task.
+
+Also, you could call `.attach()` without task id. **Datetime will be used as task id.**
+
+```python
+tracer = Tracer('checkpoints').attach()
+```
 
 ### Saving config
 
@@ -49,7 +57,7 @@ args = {'epoch_n': 120,
         'optimizer': torch.optim.RMSprop(net.parameters(), lr=1e-3)}
 ```
 
-The config dict should be wrapped with `torchtracer.data.Config` when saving it.
+The config dict should be wrapped with `torchtracer.data.Config`
 
 ```python
 cfg = Config(args)
@@ -99,23 +107,51 @@ Epoch #005	train_loss: 18.4679	valid_loss: 19.6304
 
 ### Saving model
 
-The model object should be wrapped with `torchtracer.data.Model`.
+The model object should be wrapped with `torchtracer.data.Model`
+
+If `file` not specified, it will generates model files `model.txt`. Otherwise, it will be `somename.txt`
 
 ```python
-tracer.store(Model(model))
+tracer.store(Model(model), file='somename')
 ```
+
+This step will create 2 files: 
+
+- **description**: `somename.txt`
+
+```text
+Sequential
+Sequential(
+  (0): Linear(in_features=1, out_features=6, bias=True)
+  (1): ReLU()
+  (2): Linear(in_features=6, out_features=12, bias=True)
+  (3): ReLU()
+  (4): Linear(in_features=12, out_features=12, bias=True)
+  (5): ReLU()
+  (6): Linear(in_features=12, out_features=1, bias=True)
+)
+```
+
+- **parameters**: `somename.pth`
 
 ### Saving matplotlib images
 
+Use `tracer.store(figure, file)` to save matplotlib figure in `images/`
+
 ```python
+# assume that `train_losses` and `valid_losses` are lists of losses. 
 # create figure manually.
 plt.plot(train_losses, label='train loss', c='b')
 plt.plot(valid_losses, label='valid loss', c='r')
 plt.title('Demo Learning on SQRT')
 plt.legend()
-# save figure.
+# save figure. remember to call `plt.gcf()`
 tracer.store(plt.gcf(), 'losses.png')
 ```
+
+This step will save a png file `losses.png` representing losses curves.
+
+### 
 
 ## Contribute
 

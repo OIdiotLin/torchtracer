@@ -75,6 +75,7 @@ def train(model, tracer=None, **kwargs):
     plt.title('Demo Learning on SQRT')
     plt.legend()
     tracer.store(plt.gcf(), 'losses.png')
+    plt.show()
 
 
 if __name__ == '__main__':
@@ -89,6 +90,6 @@ if __name__ == '__main__':
             'batch_size': 10,
             'criterion': nn.MSELoss(),
             'optimizer': torch.optim.RMSprop(net.parameters(), lr=1e-3)}
-    tracer = Tracer('checkpoints').attach('rabbit2')
+    tracer = Tracer('checkpoints').attach('rabbit1')
     train(net, tracer, **args)
     tracer.detach()
