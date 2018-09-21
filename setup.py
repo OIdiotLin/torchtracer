@@ -6,7 +6,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='torchtracer',
-    version='0.1.4',
+    version='0.1.5',
     author='OIdiotLin',
     author_email='oidiotlin@gmail.com',
     maintainer='OIdiotLin',

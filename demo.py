@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
+import torchvision
+from torch.utils.data import DataLoader
 
 from torchtracer import Tracer
 from torchtracer.data import Config, Model
@@ -89,7 +91,8 @@ if __name__ == '__main__':
     args = {'epoch_n': 120,
             'batch_size': 10,
             'criterion': nn.MSELoss(),
-            'optimizer': torch.optim.RMSprop(net.parameters(), lr=1e-3)}
-    tracer = Tracer('checkpoints').attach('rabbit1')
+            'optimizer': torch.optim.RMSprop(net.parameters(), lr=1e-3),
+            'dataloader': DataLoader(dataset=torchvision.datasets.fakedata)}
+    tracer = Tracer('checkpoints').attach('rabbit')
     train(net, tracer, **args)
     tracer.detach()

@@ -47,7 +47,8 @@ class Config(object):
         for k in dic.keys():
             if type(dic[k]) in [int, float, bool, str, list]:
                 res[k] = dic[k]
-            else:
+            elif isinstance(dic[k], (torch.optim.Optimizer,
+                                     torch.nn.modules.loss._Loss)):
                 res[k] = Config.from_dict(dic[k])
         return res
 
