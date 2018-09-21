@@ -1,3 +1,6 @@
+import matplotlib
+
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -77,7 +80,6 @@ def train(model, tracer=None, **kwargs):
     plt.title('Demo Learning on SQRT')
     plt.legend()
     tracer.store(plt.gcf(), 'losses.png')
-    plt.show()
 
 
 if __name__ == '__main__':
