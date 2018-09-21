@@ -1,6 +1,17 @@
 language: python
+python:
+- "3.5"
+- "3.7"
 
 sudo: false
+dist: trusty
+cache: pip
+
+install:
+- pip install -r ./requirements.txt
+
+script:
+- python demo.py
 
 deploy:
   provider: pypi
