@@ -1,0 +1,11 @@
+language: python
+
+sudo: false
+
+deploy:
+  provider: pypi
+  user: OIdiotLin
+  password:
+    secure: WtDDpKNpwFQo3uhz9HDO7GpsySEXeeFhZyCwHnGtdSaSM+Ev/YDuPJTuFGGbbLsDZJGF0lFfl53oLVSg8aytAeT8Yu9Uw67TwoGp+IFjTEMEc4rufQMsVoO9BY+C0fy8H9msEzh2ntQsp2HuMjF69r0IMxUcSZ6f+hoCoHcfTOhlD2PiKijF6T7Qh/u7NMdMHN7qlSjUNSdQOFmIf6qQAg6Oq+MoaL9lxJZzdmh5WPd7WAL8ejVVxZWpCspgKWkkrExegvE9tEs91oqhu/DzduS1Gdf7MpF5vSYe26FJbMcfSyXbjDKxxuJAuIGd3JOWZJGI2DzB52YsXjePFJu9FV7kWwZvJTcExBjhTa3jz3M0wyeOUraUi7ncvKKtXSksLs9JLk2K3baHvz2JzJR1Don7euXhKkg7FJQajITDNNoZquknfuYvWctYBNjwiES1QwCrncC7HD8WALrnMNQhz2KVxJ5JD4VAsX58tM6ArPLBsh/qJFCD9DJ/TIMKI3mYmIlO03LQqAHqfte9lc+rSel+4io1Mz5jx1Fk4ZvvwlC9nkN40ZWz5yj/u0cajtCA/hop4tL77XbipLFmCFNN+SERRDQv65hwy69OtMk7uMmnnV1OYQMQOb1t/k0krKqGYPzjbdXqQ6wzqnmstRzLypRrU1paQHm1FvK9TL//i44=
+  on:
+    tags: true
