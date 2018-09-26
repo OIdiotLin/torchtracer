@@ -1,5 +1,6 @@
 # torchtracer
 
+[![Build Status](https://travis-ci.com/OIdiotLin/torchtracer.svg?branch=master)](https://travis-ci.com/OIdiotLin/torchtracer)
 ![](https://img.shields.io/badge/python-3.6-blue.svg)
 ![](https://img.shields.io/badge/pytorch-0.4.1-orange.svg)
 
