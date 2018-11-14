@@ -53,6 +53,8 @@ def train(model, tracer=None, **kwargs):
     train_losses = []
     valid_losses = []
 
+    tracer.epoch_bar_init(epoch_n)
+
     for epoch in range(epoch_n):
         loss_sum = 0
         for step in range(30):
@@ -67,12 +69,13 @@ def train(model, tracer=None, **kwargs):
 
         train_loss = loss_sum / (30 * batch_size)
         valid_loss = evaluate(model, **kwargs)
+        tracer.epoch_bar.update(n=1, train_loss=train_loss, valid_loss=train_loss)
 
         tracer.log('Epoch #{:03d}\ttrain_loss: {:.4f}\tvalid_loss: {:.4f}'.format(epoch, train_loss, valid_loss))
 
         train_losses.append(train_loss)
         valid_losses.append(valid_loss)
-
+    tracer.epoch_bar.close()
     tracer.store(Model(model))
 
     plt.plot(train_losses, label='train loss', c='b')
@@ -91,7 +94,7 @@ if __name__ == '__main__':
                         nn.ReLU(),
                         nn.Linear(12, 1, True))
     args = {'epoch_n': 120,
-            'batch_size': 10,
+            'batch_size': 50,
             'criterion': nn.MSELoss(),
             'optimizer': torch.optim.RMSprop(net.parameters(), lr=1e-3),
             'dataloader': DataLoader(dataset=torchvision.datasets.fakedata)}

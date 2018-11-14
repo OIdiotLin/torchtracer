@@ -1,13 +1,17 @@
 import os
 from datetime import datetime
 
+from tqdm import tqdm
+
 from torchtracer.utils import StoreMan
+from torchtracer.utils.progress import ProgressBar
 
 
 class Tracer:
     def __init__(self, root):
         self.root = root
         self.storage = None
+        self.epoch_bar = None
         print('Tracer start at {}'.format(os.path.abspath(self.root)))
 
     def attach(self, task_id=None):
@@ -29,3 +33,10 @@ class Tracer:
         if self.storage is None:
             raise Exception('You should attach with task id first.')
         self.storage.log(msg, file)
+
+    def epoch_bar_init(self, epoch_num):
+        self.epoch_bar = ProgressBar(total=epoch_num, desc='Epoch')
+
+    @staticmethod
+    def print(msg):
+        tqdm.write(msg)

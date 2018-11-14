@@ -152,7 +152,28 @@ tracer.store(plt.gcf(), 'losses.png')
 
 This step will save a png file `losses.png` representing losses curves.
 
-### 
+### Progress bar for epochs
+
+Use `tracer.epoch_bar_init(total)` to initialize a progress bar.
+
+```python
+tracer.epoch_bar_init(epoch_n)
+```
+
+Use `tracer.epoch_bar.update(n=1, **params)` to update postfix of the progress bar.
+
+```python
+tracer.epoch_bar.update(train_loss=train_loss, valid_loss=train_loss)
+```
+
+```plain
+(THIS IS A DEMO) 
+Tracer start at /home/oidiotlin/projects/torchtracer/checkpoints
+Tracer attached with task: rabbit
+Epoch: 100%|█████████| 120/120 [00:02<00:00, 41.75it/s, train_loss=0.417, valid_loss=0.417]
+```
+
+**DO NOT FORGET TO CALL** `tracer.epoch_bar.close()` to finish the bar.
 
 ## Contribute
 
