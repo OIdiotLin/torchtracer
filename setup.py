@@ -1,12 +1,12 @@
 import setuptools
-
+import torchtracer
 
 with open('README.md', 'r') as f:
     long_description = f.read()
 
 setuptools.setup(
-    name='torchtracer',
-    version='0.1.5',
+    name=torchtracer.__name__,
+    version=torchtracer.__version__,
     author='OIdiotLin',
     author_email='oidiotlin@gmail.com',
     maintainer='OIdiotLin',
